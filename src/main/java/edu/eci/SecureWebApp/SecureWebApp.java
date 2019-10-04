@@ -20,6 +20,7 @@ public class SecureWebApp {
             return null;
         });
         post("/register", (req, res) -> {
+            System.out.println(req.queryParams("email"));
             return null;
         });
     }

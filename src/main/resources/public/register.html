@@ -30,7 +30,7 @@
     <div class="row" style="margin-top: 5%;">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <form method="post">
+            <form action="/register" method="post">
                 <div class="form-group">
                     <label for="inputName">Nombre</label>
                     <input type="text" class="form-control" id="inputName" name="name" placeholder="Ingrese su nombre">
@@ -44,7 +44,9 @@
                     <label for="inputPwd">Contraseña</label>
                     <input type="password" class="form-control" id="inputPwd" name="pwd" placeholder="Contraseña">
                 </div>
-                <button type="button" class="btn btn-primary">Registrarse</button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 5%; margin-bottom: 5%;">
+                    Registrarse
+                </button>
             </form>
             ¿Ya tiene cuenta? <a href="login.html">Ingresa</a>
         </div>
