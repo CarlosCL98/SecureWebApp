@@ -1,0 +1,1 @@
+keytool -importcert -trustcacerts -file mycert.cer -alias ca_alias -keystore "C:\Program Files\Java\jdk1.8.0_181\jre\lib\security\cacerts"
