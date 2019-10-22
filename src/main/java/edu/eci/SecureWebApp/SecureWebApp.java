@@ -23,7 +23,7 @@ public class SecureWebApp {
     public static void main(String[] args) {
         port(getPort());
         staticFiles.location("/public");
-        secure("deploy/KeyStore.jks", "aACRSecure1App", "deploy/truststore", "jQYXDate5App");
+        secure("deploy/keyStoreSecureApp.jks", "aACRSecure1App", "deploy/truststoreDateServer.jks", "jQYXDate5App");
         get("/", (req, res) -> {
             res.type("text/html");
             res.redirect("/index.html");

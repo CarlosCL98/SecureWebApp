@@ -1,0 +1,13 @@
+keytool -genkey -keystore keyStoreSecureApp.jks -alias serverSecureApp -keyalg RSA -keysize 2048 -validity 3950
+keytool -importkeystore -srckeystore keyStoreSecureApp.jks -destkeystore keyStoreSecureApp.jks -deststoretype pkcs12
+keytool -selfcert -alias serverSecureApp -keystore keyStoreSecureApp.jks -validity 3950
+keytool -export -alias serverSecureApp -keystore keyStoreSecureApp.jks -rfc -file secureAppCert.cer
+keytool -importcert -alias serverSecureApp -file secureAppCert.cer -keystore truststoreSecureApp.jks
+aACRSecure1App
+
+keytool -genkey -keystore keyStoreDateServer.jks -alias dateServer -keyalg RSA -keysize 2048 -validity 3950
+keytool -importkeystore -srckeystore keyStoreDateServer.jks -destkeystore keyStoreDateServer.jks -deststoretype pkcs12
+keytool -selfcert -alias dateServer -keystore keyStoreDateServer.jks -validity 3950
+keytool -export -alias dateServer -keystore keyStoreDateServer.jks -rfc -file dateServerCert.cer
+keytool -importcert -alias dateServer -file dateServerCert.cer -keystore truststoreDateServer.jks
+jQYXDate5App
