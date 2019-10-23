@@ -1,5 +1,10 @@
 package edu.eci.SecureWebApp.Model;
 
+/**
+ * Esta clase representa a un usuario.
+ *
+ * @author Carlos Medina
+ */
 public class User {
 
     private int id;
@@ -7,9 +12,20 @@ public class User {
     private String email;
     private String password;
 
+    /**
+     * Constructor vacío para User.
+     */
     public User() {
     }
 
+    /**
+     * Constructor con parámetros para User.
+     *
+     * @param id       identificador del User.
+     * @param name     nombre del User.
+     * @param email    correo único del User.
+     * @param password contraseña del User.
+     */
     public User(int id, String name, String email, String password) {
         this.id = id;
         this.name = name;

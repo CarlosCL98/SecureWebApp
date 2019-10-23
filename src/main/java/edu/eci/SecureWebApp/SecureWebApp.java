@@ -11,11 +11,14 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static spark.Spark.*;
 
+/**
+ * Esta clase representa a la aplicación web segura que permite registrar y autenticar a un usuario.
+ *
+ * @author Carlos Medina
+ */
 public class SecureWebApp {
 
     private static UserRepository userRepository = new UserRepository();
@@ -23,7 +26,10 @@ public class SecureWebApp {
     public static void main(String[] args) {
         port(getPort());
         staticFiles.location("/public");
-        secure("deploy/keyStoreSecureApp.jks", "aACRSecure1App", "deploy/truststoreDateServer.jks", "jQYXDate5App");
+        secure("deploy/keyStoreSecureApp.jks",
+                "aACRSecure1App",
+                "deploy/truststoreDateServer.jks",
+                "jQYXDate5App");
         get("/", (req, res) -> {
             res.type("text/html");
             res.redirect("/index.html");
@@ -62,6 +68,7 @@ public class SecureWebApp {
                 return null;
             }
             String pwd = bytesToHex(getSHA(req.queryParams("pwd")));
+            System.out.println("Password Encrypted: '" + pwd + "'");
             User newUser = new User(0, name, email, pwd);
             userRepository.saveUser(newUser);
             res.status(201);
@@ -73,8 +80,8 @@ public class SecureWebApp {
     /**
      * From https://www.baeldung.com/sha-256-hashing-java
      *
-     * @param pwd
-     * @return
+     * @param pwd contraseña a ser tranformada.
+     * @return byte[] como el arreglo de carácteres de la contraseña.
      * @throws NoSuchAlgorithmException
      */
     private static byte[] getSHA(String pwd) throws NoSuchAlgorithmException {
@@ -86,8 +93,8 @@ public class SecureWebApp {
     /**
      * From https://www.baeldung.com/sha-256-hashing-java
      *
-     * @param hash
-     * @return
+     * @param hash contraseña ya cifrada.
+     * @return String como el hex del hash.
      */
     private static String bytesToHex(byte[] hash) {
         StringBuffer hexString = new StringBuffer();
@@ -99,6 +106,13 @@ public class SecureWebApp {
         return hexString.toString();
     }
 
+    /**
+     * Permite mostrar el perfil de un usuario autenticado, mostrandole sus datos. Para esto se retorna la página
+     * respectiva.
+     *
+     * @param user usuario ingresado y autenticado.
+     * @return String con la página.
+     */
     private static String showProfile(User user) {
         String date = bringDate();
         String profilePage = "<!DOCTYPE html>\n" +
@@ -155,11 +169,17 @@ public class SecureWebApp {
         return profilePage;
     }
 
+    /**
+     * Este método realiza el llamado a un servidor de fechas para encontrar la fecha actual y mostrarla en el perfil
+     * de un usuario.
+     *
+     * @return String como la fecha actual.
+     */
     private static String bringDate() {
         String date = "";
         URL url = null;
         try {
-            url = new URL("https://localhost:4568/date");
+            url = new URL("https://localhost:4568/date"); //https://ec2-35-173-200-145.compute-1.amazonaws.com:4568/date
             BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
             String line = br.readLine();
             while (line != null) {
@@ -174,6 +194,11 @@ public class SecureWebApp {
         return date;
     }
 
+    /**
+     * Este método toma el puerto del entorno en el que se esté ejecutando para poder realizar el despliegue respectivo.
+     *
+     * @return int como el puerto a usar.
+     */
     private static int getPort() {
         int port = 4567; //default port if heroku-port isn't set
         if (System.getenv("PORT") != null) {
@@ -186,7 +211,7 @@ public class SecureWebApp {
         //for localhost testing only
         javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
                 (hostname, sslSession) -> {
-                    if (hostname.equals("localhost")) {
+                    if (hostname.equals("localhost")) { //ec2-35-173-200-145.compute-1.amazonaws.com
                         return true;
                     }
                     return false;
